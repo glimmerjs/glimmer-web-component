@@ -1,5 +1,5 @@
 {
-  "name": "@glimmer/web-component-wrapper",
+  "name": "@glimmer/web-component",
   "version": "0.0.0",
   "description": "Render Glimmer components with custom elements",
   "main": "dist/commonjs/es2017/index.js",
