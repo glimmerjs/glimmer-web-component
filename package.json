@@ -1,0 +1,30 @@
+{
+  "name": "@glimmer/web-component-wrapper",
+  "version": "0.0.0",
+  "description": "Render Glimmer components with custom elements",
+  "main": "dist/commonjs/es2017/index.js",
+  "module": "dist/modules/es2017/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "ember build",
+    "preversion": "npm test",
+    "prepublish": "npm run build",
+    "postpublish": "git push origin master --tags",
+    "test": "ember test"
+  },
+  "contributors": [
+    "Dan Gebhardt <dan@cerebris.com>",
+    "Robbie Pitts <me@robbie-pitts.com>",
+    "Tom Dale <tom@tomdale.net>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@glimmer/application": "^0.3.5"
+  },
+  "devDependencies": {
+    "@glimmer/build": "^0.6.1"
+  }
+}
