@@ -22,9 +22,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@glimmer/application": "^0.3.5"
+    "@glimmer/application": "^0.3.6"
   },
   "devDependencies": {
-    "@glimmer/build": "^0.6.1"
+    "@glimmer/build": "^0.6.1",
+    "testem": "^1.15.0"
   }
 }
