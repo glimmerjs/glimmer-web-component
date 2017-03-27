@@ -14,7 +14,8 @@ module('initializeCustomElements', {
   },
 
   afterEach() {
-    document.body.removeChild(containerElement);
+    containerElement.remove();
+    containerElement = null;
   }
 });
 
@@ -46,8 +47,8 @@ function setupApp(): object {
 
 function appendCustomElementWithSibling(customTagName, siblingTagName): void {
   let customElement = document.createElement(customTagName);
-  document.body.appendChild(customElement);
+  containerElement.appendChild(customElement);
 
   let referenceElement = document.createElement(siblingTagName);
-  document.body.appendChild(referenceElement);
+  containerElement.appendChild(referenceElement);
 }
