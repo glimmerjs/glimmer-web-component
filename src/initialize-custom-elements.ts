@@ -1,7 +1,7 @@
 import Application from '@glimmer/application';
 
-export default function initializeCustomElements(app: Application, customElementDefinitions: { name: string }[]): void {
-  customElementDefinitions.forEach(({ name }) => {
+export default function initializeCustomElements(app: Application, customElementDefinitions: string[]): void {
+  customElementDefinitions.forEach((name) => {
     initializeCustomElement(app, name);
   });
 }
