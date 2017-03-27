@@ -25,7 +25,7 @@
     "@glimmer/application": "^0.3.6"
   },
   "devDependencies": {
-    "@glimmer/build": "^0.6.1",
+    "@glimmer/build": "^0.6.2",
     "testem": "^1.15.0"
   }
 }
