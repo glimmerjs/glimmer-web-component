@@ -1,4 +1,4 @@
-# glimmer-web-component-wrapper
+# @glimmer/web-component
 
 ## License
 
