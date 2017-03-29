@@ -30,6 +30,10 @@ initializeCustomElements(app, /* array of component names */);
 
 This will register custom elements for each of the component names you give to `initializeCustomElements` and will replace the custom element with your Glimmer component once the custom element connects. For example, if you provide the component name `'foo-bar'` you can now use the custom element `<foo-bar>` anywhere in the DOM and have your `foo-bar` component render in its place.
 
+## Browser Support
+
+Browser support for the `WebComponents` spec is not [not great yet](http://caniuse.com/#feat=custom-elementsv1).  If you want to use `customElements.define` where it is not yet supported natively, you'll need to install the [polyfill](https://github.com/webcomponents/custom-elements).
+
 ## License
 
 MIT License.
