@@ -21,10 +21,8 @@
     "Tom Dale <tom@tomdale.net>"
   ],
   "license": "MIT",
-  "dependencies": {
-    "@glimmer/application": "^0.3.6"
-  },
   "devDependencies": {
+    "@glimmer/application": "^0.4.0",
     "@glimmer/build": "^0.6.2",
     "ember-cli": "^2.12.1",
     "testem": "^1.15.0"
