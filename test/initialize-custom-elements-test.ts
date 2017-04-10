@@ -7,6 +7,11 @@ const { module, test } = QUnit;
 let containerElement: HTMLDivElement;
 
 module('initializeCustomElements', {
+  before() {
+    let app = setupApp();
+    initializeCustomElements(app as Application, ['hello-world']);
+  },
+
   beforeEach() {
     containerElement = document.createElement('div');
     containerElement.setAttribute('id', 'container');
@@ -19,20 +24,30 @@ module('initializeCustomElements', {
   }
 });
 
-test('renders a root in place of a custom element', function(assert) {
-  assert.expect(4);
-
-  let app = setupApp();
-
-  initializeCustomElements(app as Application, ['hello-world']);
+test('renders glimmer component in place of a custom element', function(assert) {
+  assert.expect(3);
 
   assert.equal(document.getElementsByTagName('aside').length, 0, 'glimmer component not inserted yet');
 
-  appendCustomElementWithSibling('hello-world', 'section');
+  appendElements('article', 'hello-world', 'section');
 
-  assert.equal(document.getElementsByTagName('hello-world').length, 0, 'custom element connected and removed');
-  assert.equal(document.getElementsByTagName('aside').length, 1, 'glimmer component rendered in place of custom element');
-  assert.equal(document.getElementsByTagName('aside').item(0).nextElementSibling.tagName, 'SECTION', 'glimmer component inserted in correct spot');
+  let helloWorldElements = document.getElementsByTagName('hello-world');
+  let glimmerComponentElements = document.getElementsByTagName('aside');
+
+  assert.equal(helloWorldElements.length, 0, 'custom element connected and removed');
+  assert.equal(glimmerComponentElements.length, 1, 'glimmer component rendered in place of custom element');
+});
+
+test('leaves surrouding content intact', function(assert) {
+  assert.expect(2);
+
+  appendElements('article', 'hello-world', 'section');
+
+  let glimmerComponentElement = document.getElementsByTagName('aside').item(0);
+  let precedingElement = document.getElementsByTagName('article').item(0);
+
+  assert.equal(glimmerComponentElement.nextElementSibling.tagName, 'SECTION', 'following content is left untouched');
+  assert.equal(precedingElement.nextElementSibling.tagName, 'ASIDE', 'preceding content is left untouched');
 });
 
 function setupApp(): object {
@@ -45,10 +60,9 @@ function setupApp(): object {
   };
 }
 
-function appendCustomElementWithSibling(customTagName, siblingTagName): void {
-  let customElement = document.createElement(customTagName);
-  containerElement.appendChild(customElement);
-
-  let referenceElement = document.createElement(siblingTagName);
-  containerElement.appendChild(referenceElement);
+function appendElements(...tagNames): void {
+  tagNames.forEach(tagName => {
+    let tag = document.createElement(tagName);
+    containerElement.appendChild(tag);
+  });
 }
