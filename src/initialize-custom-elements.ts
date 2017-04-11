@@ -7,17 +7,23 @@ export default function initializeCustomElements(app: Application, customElement
 }
 
 function initializeCustomElement(app: Application, name: string): void {
-  class GlimmerElement extends HTMLElement {
-    connectedCallback() {
-      let placeholder = document.createTextNode('');
-      let parent = this.parentNode;
-
-      parent.insertBefore(placeholder, this);
-      parent.removeChild(this);
-
-      app.renderComponent(name, parent, placeholder);
-    }
+  function GlimmerElement() {
+    return Reflect.construct(HTMLElement, [], GlimmerElement);
   }
+  GlimmerElement.prototype = Object.create(HTMLElement.prototype, {
+    constructor: { value: GlimmerElement },
+    connectedCallback: {
+      value: function connectedCallback() {
+        let placeholder = document.createTextNode('');
+        let parent = this.parentNode;
+
+        parent.insertBefore(placeholder, this);
+        parent.removeChild(this);
+
+        app.renderComponent(name, parent, placeholder);
+      }
+    }
+  });
 
   window.customElements.define(name, GlimmerElement);
 }
