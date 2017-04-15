@@ -5,6 +5,7 @@ import { Option } from "@glimmer/util";
 const { module, test } = QUnit;
 
 let containerElement: HTMLDivElement;
+let renderPromise: Promise<void>;
 
 module('initializeCustomElements', {
   before() {
@@ -25,6 +26,8 @@ module('initializeCustomElements', {
 });
 
 test('renders glimmer component in place of a custom element', function(assert) {
+  let done = assert.async();
+
   assert.expect(3);
 
   assert.equal(document.getElementsByTagName('aside').length, 0, 'glimmer component not inserted yet');
@@ -34,11 +37,16 @@ test('renders glimmer component in place of a custom element', function(assert) 
   let helloWorldElements = document.getElementsByTagName('hello-world');
   let glimmerComponentElements = document.getElementsByTagName('aside');
 
-  assert.equal(helloWorldElements.length, 0, 'custom element connected and removed');
-  assert.equal(glimmerComponentElements.length, 1, 'glimmer component rendered in place of custom element');
+  renderPromise.then(() => {
+    assert.equal(helloWorldElements.length, 0, 'custom element connected and removed');
+    assert.equal(glimmerComponentElements.length, 1, 'glimmer component rendered in place of custom element');
+    done();
+  });
 });
 
 test('leaves surrouding content intact', function(assert) {
+  let done = assert.async();
+
   assert.expect(2);
 
   appendElements('article', 'hello-world', 'section');
@@ -46,16 +54,37 @@ test('leaves surrouding content intact', function(assert) {
   let glimmerComponentElement = document.getElementsByTagName('aside').item(0);
   let precedingElement = document.getElementsByTagName('article').item(0);
 
-  assert.equal(glimmerComponentElement.nextElementSibling.tagName, 'SECTION', 'following content is left untouched');
-  assert.equal(precedingElement.nextElementSibling.tagName, 'ASIDE', 'preceding content is left untouched');
+  renderPromise.then(() => {
+    assert.equal(glimmerComponentElement.nextElementSibling.tagName, 'SECTION', 'following content is left untouched');
+    assert.equal(precedingElement.nextElementSibling.tagName, 'ASIDE', 'preceding content is left untouched');
+    done();
+  });
+});
+
+test('passes attributes on to glimmer top-level element', function(assert) {
+  let done = assert.async();
+
+  assert.expect(1);
+
+  let tag = document.createElement('hello-world');
+  tag.setAttribute('whatevs', 'lawl');
+  containerElement.appendChild(tag);
+
+  renderPromise.then(() => {
+    let glimmerComponentElements = document.getElementsByTagName('aside');
+    assert.equal(glimmerComponentElements[0].attributes.getNamedItem('whatevs').value, 'lawl');
+    done();
+  });
 });
 
 function setupApp(): object {
   return {
-    renderComponent(name, parent, placeholder) {
+    renderComponent(name, parent, placeholder): Promise<void> {
       let glimmerComponentElement = document.createElement('aside');
 
       parent.insertBefore(glimmerComponentElement, placeholder);
+
+      return renderPromise = Promise.resolve();
     }
   };
 }
