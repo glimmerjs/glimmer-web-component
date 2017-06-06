@@ -9,4 +9,3 @@ before_install:
 
 node_js:
   - "6"
-  - "node"
