@@ -20,7 +20,9 @@ function initializeCustomElement(app: Application, name: string): void {
         parent.insertBefore(placeholder, this);
         parent.removeChild(this);
 
-        app.renderComponent(name, parent, placeholder).then(() => {
+        app.renderComponent(name, parent, placeholder);
+
+        whenRendered(app, () => {
           let customElement = this as Element;
           let glimmerElement = placeholder.previousElementSibling;
 
@@ -40,5 +42,13 @@ function assignAttributes(fromElement: Element, toElement: Element): void {
   for (let i = 0; i < attributes.length; i++) {
     let { name, value } = attributes.item(i);
     toElement.setAttribute(name, value);
+  }
+}
+
+function whenRendered(app, callback) {
+  if (app['_rendering']) {
+    setTimeout(whenRendered, 10, app, callback);
+  } else {
+    callback();
   }
 }
