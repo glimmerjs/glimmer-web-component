@@ -7,7 +7,7 @@
     "inlineSources": true,
     "inlineSourceMap": true,
     "noUnusedLocals": true,
-    "noImplicitAny": true,
+    "strict": true,
     "declaration": true,
     "newLine": "LF",
     "outDir": "dist",

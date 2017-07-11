@@ -1,54 +1,22 @@
 import Application from '@glimmer/application';
+import glimmerElementFactory from './glimmer-element';
 
-export default function initializeCustomElements(app: Application, customElementDefinitions: string[]): void {
-  customElementDefinitions.forEach((name) => {
-    initializeCustomElement(app, name);
+export interface CustomElementOptions {
+  app: Application;
+  componentName: string;
+  elementName?: string;
+}
+
+export function initializeCustomElements(app: Application, customElementDefinitions: string[]): void {
+  customElementDefinitions.forEach(name => {
+    initializeCustomElement({ app, componentName: name });
   });
 }
 
-function initializeCustomElement(app: Application, name: string): void {
-  function GlimmerElement() {
-    return Reflect.construct(HTMLElement, [], GlimmerElement);
+export function initializeCustomElement({ app, componentName, elementName }: CustomElementOptions): void {
+  if (!elementName) {
+    elementName = componentName;
   }
-  GlimmerElement.prototype = Object.create(HTMLElement.prototype, {
-    constructor: { value: GlimmerElement },
-    connectedCallback: {
-      value: function connectedCallback(): void {
-        let placeholder = document.createElement('span');
-        let parent = this.parentNode;
 
-        parent.insertBefore(placeholder, this);
-        parent.removeChild(this);
-
-        app.renderComponent(name, parent, placeholder);
-
-        whenRendered(app, () => {
-          let customElement = this as Element;
-          let glimmerElement = placeholder.previousElementSibling;
-
-          placeholder.remove();
-          assignAttributes(customElement, glimmerElement);
-        });
-      }
-    }
-  });
-
-  window.customElements.define(name, GlimmerElement);
-}
-
-function assignAttributes(fromElement: Element, toElement: Element): void {
-  let attributes = fromElement.attributes;
-
-  for (let i = 0; i < attributes.length; i++) {
-    let { name, value } = attributes.item(i);
-    toElement.setAttribute(name, value);
-  }
-}
-
-function whenRendered(app, callback) {
-  if (app['_rendering']) {
-    setTimeout(whenRendered, 10, app, callback);
-  } else {
-    callback();
-  }
+  window.customElements.define(elementName, glimmerElementFactory({ app, componentName }));
 }
