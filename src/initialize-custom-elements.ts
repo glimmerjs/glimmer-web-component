@@ -47,7 +47,9 @@ function assignAttributes(fromElement: Element, toElement: Element): void {
 
 function whenRendered(app, callback) {
   if (app['_rendering']) {
-    setTimeout(whenRendered, 10, app, callback);
+    self.Promise.resolve.then(() => {
+      whenRendered(app, callback);
+    });
   } else {
     callback();
   }
