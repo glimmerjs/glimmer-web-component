@@ -25,10 +25,13 @@ import initializeCustomElements from '@glimmer/web-component';
 And then after `app.boot()`:
 
 ```ts
-initializeCustomElements(app, /* array of component names */);
+initializeCustomElements(app, {
+  'button-list': 'ButtonList',
+  'x-button': 'Button'
+});
 ```
 
-This will register custom elements for each of the component names you give to `initializeCustomElements` and will replace the custom element with your Glimmer component once the custom element connects. For example, if you provide the component name `'foo-bar'` you can now use the custom element `<foo-bar>` anywhere in the DOM and have your `foo-bar` component render in its place.
+This will register custom elements for each of the items defined in the hash passed to `initializeCustomElements` and will replace the custom element with your Glimmer component once the custom element connects. For example, if you provide the hash `{ 'foo-bar': 'FooBar' }`, you can then use the custom element `<foo-bar>` anywhere in the DOM and have your `<FooBar>` Glimmer component render in its place.
 
 ## Browser Support
 

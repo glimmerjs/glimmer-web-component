@@ -10,7 +10,7 @@ let renderPromise: Promise<void>;
 module('initializeCustomElements', {
   before() {
     let app = setupApp();
-    initializeCustomElements(app as Application, ['hello-world']);
+    initializeCustomElements(app as Application, { 'hello-world': 'HelloWorld' });
   },
 
   beforeEach() {
