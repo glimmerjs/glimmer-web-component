@@ -1,12 +1,14 @@
 import Application from '@glimmer/application';
 
-export default function initializeCustomElements(app: Application, customElementDefinitions: string[]): void {
-  customElementDefinitions.forEach((name) => {
-    initializeCustomElement(app, name);
-  });
+export default function initializeCustomElements(app: Application, customElementDefinitions: { [key: string]: string; }): void {
+  for(let customElementName in customElementDefinitions) {
+    let glimmerComponentName = customElementDefinitions[customElementName];
+
+    initializeCustomElement(app, customElementName, glimmerComponentName);
+  }
 }
 
-function initializeCustomElement(app: Application, name: string): void {
+function initializeCustomElement(app: Application, customElementName: string, glimmerComponentName: string): void {
   function GlimmerElement() {
     return Reflect.construct(HTMLElement, [], GlimmerElement);
   }
@@ -20,7 +22,7 @@ function initializeCustomElement(app: Application, name: string): void {
         parent.insertBefore(placeholder, this);
         parent.removeChild(this);
 
-        app.renderComponent(name, parent, placeholder);
+        app.renderComponent(glimmerComponentName, parent, placeholder);
 
         whenRendered(app, () => {
           let customElement = this as Element;
@@ -33,7 +35,7 @@ function initializeCustomElement(app: Application, name: string): void {
     }
   });
 
-  window.customElements.define(name, GlimmerElement);
+  window.customElements.define(customElementName, GlimmerElement);
 }
 
 function assignAttributes(fromElement: Element, toElement: Element): void {
