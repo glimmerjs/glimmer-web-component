@@ -49,7 +49,7 @@ function assignAttributes(fromElement: Element, toElement: Element): void {
 
 function whenRendered(app, callback) {
   if (app['_rendering']) {
-    self.Promise.resolve.then(() => {
+    requestAnimationFrame(() => {
       whenRendered(app, callback);
     });
   } else {
