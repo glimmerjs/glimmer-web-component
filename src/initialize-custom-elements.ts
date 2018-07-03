@@ -27,6 +27,9 @@ function initializeCustomElement(app: Application, customElementName: string, gl
         whenRendered(app, () => {
           let customElement = this as Element;
           let glimmerElement = placeholder.previousElementSibling;
+          if (!glimmerElement) {
+            return;
+          }
 
           placeholder.remove();
           assignAttributes(customElement, glimmerElement);
